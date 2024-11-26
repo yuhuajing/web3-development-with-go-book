@@ -1,11 +1,14 @@
 # New account
 ## ECDSA 生成新的地址
+要首先生成一个新的钱包，需要导入 `go-ethereum crypto` 包，该包提供用于生成随机私钥的 `GenerateKey` 方法
+1. 生成全新的私钥，并将私钥存储在本地文件
+2. 基于私钥导出公钥信息
+3. 基于公钥导出账户地址
 ```go
-package generateAccount
+package main
 
 import (
 	"crypto/ecdsa"
-	"errors"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"log"
@@ -17,15 +20,7 @@ func NewAccount() common.Address {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//k := hex.EncodeToString(crypto.FromECDSA(ecdsaPrivateKey))
-	//fmt.Println(k)
-
-	publicKey := ecdsaPrivateKey.Public()
-	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
-	if !ok {
-		log.Fatal(errors.New("Export ecdsaPublicKey error"))
-	}
-	newAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+	newAddress := EcdsaAddressFromPrivateKey(ecdsaPrivateKey)
 	err = crypto.SaveECDSA(newAddress.Hex()+"_key.txt", ecdsaPrivateKey)
 	if err != nil {
 		log.Fatal(err)
@@ -56,14 +51,18 @@ func EcdsaAddressFromPrivateKey(ecdsaPrivateKey *ecdsa.PrivateKey) common.Addres
 }
 ```
 ## 生成助记词，从助记词导出新地址
+地址胜场方式：
 1. 生成助记词
-2. 拼接 助记词和 secret， 构造哈希种子
-3. 基于哈希种子逐步生成 ecdsa 私钥
-4. 基于 ecdsa 私钥导出钱包地址
-5. 基于 助记词导出 ecdsa 密钥时：
-- 必须提供相匹配的 secret 值
-- 执行相同的拼接和计算，产生相同的私钥和地址
-- 因此，secret 用于进一步保证助记词的安全
+2. 拼接助记词和 `secret`， 构造哈希种子 `seed`
+3. 基于 `seed` 逐步生成 `ecdsa` 私钥
+4. 基于私钥导出钱包地址
+
+导出账户密钥
+1. 基于助记词导出密钥时：
+- 必须提供相匹配的 `secret` 值
+- 拼接出生成账户用的哈希种子 `seed`
+- 基于 `seed` 产生相同的私钥和地址
+- 因此，`secret` 用于进一步保证助记词的安全
 ```go
 func main() {
     secret := "ert"
@@ -75,7 +74,6 @@ func KeyFromMnemonic(secret string) (string, common.Address) {
 	// Generate a mnemonic
 	entropy, _ := bip39.NewEntropy(256)
 	mnemonic, _ := bip39.NewMnemonic(entropy)
-	//fmt.Println("Mnemonic (gen): ", mnemonic)
 	// Generate a Bip32 HD wallet for the mnemonic and a user supplied passphrase
 	seed := bip39.NewSeed(mnemonic, secret)
 	masterPrivateKey, _ := bip32.NewMasterKey(seed)
@@ -85,7 +83,6 @@ func KeyFromMnemonic(secret string) (string, common.Address) {
 }
 
 func KeyFromMnemonicInput(mnemonic, secret string) string {
-	// Generate a Bip32 HD wallet for the mnemonic and a user supplied passphrase
 	seed := bip39.NewSeed(mnemonic, secret)
 	masterPrivateKey, _ := bip32.NewMasterKey(seed)
 	ecdsaPrivateKey := crypto.ToECDSAUnsafe(masterPrivateKey.Key)
@@ -95,19 +92,20 @@ func KeyFromMnemonicInput(mnemonic, secret string) string {
 	return privateKeyHex
 }
 ```
-## 生成Keystore，从Keystore导出地址
-1. 创建新的钱包地址，账户信息通过 secret 加密存储并导出 keystore 文件
-2. 基于 secret 解密 keystore 文件
-3. keystore 直接基于 secret 签名数据
-4. keystore 可以先基于 secret `TimedUnlock` 解锁一段时间后可以直接用于签名
-```go
-package generateAccount
+## 从Keystore导出地址
+1. 创建新的钱包地址，账户信息通过 `secret` 加密存储并导出 `keystore` 文件
+2. 基于 `secret` 解密 `keystore` 文件
 
+私钥签名
+1. `keystore` 直接基于 `secret` 签名数据
+2. `keystore` 可以先基于 secret `TimedUnlock` 解锁一段时间后可以直接用于签名
+```go
 import (
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
-	"io/ioutil"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"log"
+	"os"
 )
 
 func NewKeystoreAccount(secret string) common.Address {
@@ -121,7 +119,7 @@ func NewKeystoreAccount(secret string) common.Address {
 
 func AddressFromKeystore(file, secret string) common.Address {
 	ks := keystore.NewKeyStore("./tmp", keystore.StandardScryptN, keystore.StandardScryptP)
-	jsonBytes, err := ioutil.ReadFile(file)
+	jsonBytes, err := os.ReadFile(file)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -134,7 +132,7 @@ func AddressFromKeystore(file, secret string) common.Address {
 
 func SignatureFromKeystore(file, secret string) string {
 	ks := keystore.NewKeyStore("./tmp", keystore.StandardScryptN, keystore.StandardScryptP)
-	jsonBytes, err := ioutil.ReadFile(file)
+	jsonBytes, err := os.ReadFile(file)
 	if err != nil {
 		log.Fatal(err)
 	}
