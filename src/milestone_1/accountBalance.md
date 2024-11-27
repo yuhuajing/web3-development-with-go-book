@@ -3,19 +3,12 @@
 `eth_getBalance` 支持读取传参地址在特定区块高度、特定区块hash、最新区块中、Pending池的余额
 ### 读取最新区块高度的账户余额
 ```go
-func Balance(account common.Address) (*big.Int, error) {
-	var ctx = context.Background()
 	balance, err := client.BalanceAt(ctx, account, nil) //nil is the latest block
-	if err != nil {
-		return balance, err
-	}
-	return balance, nil
-}
 ```
 ### 读取特定区块中账户余额-BlockHeight
 ```go
 	blockNum := big.NewInt(99999)
-	balance, err := client.BalanceAt(ctx, account, blockNum) //nil is the latest block
+	balance, err := client.BalanceAt(ctx, account, blockNum)
 ```
 ### 读取特定区块中账户余额-BlockHash
 ```go
@@ -41,5 +34,58 @@ func calcuBalanceToEth(bal *big.Int) *big.Float {
 	fbalance.SetString(bal.String())
 	fbalance = fbalance.Quo(fbalance, big.NewFloat(math.Pow10(18)))
 	return fbalance
+}
+```
+
+## 完整代码
+```go
+package milestone1
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"github.com/ethereum/go-ethereum/common"
+	"math"
+	"math/big"
+)
+
+func BalanceFromLatestBlock(account common.Address, ctx context.Context) (*big.Int, error) {
+	balance, err := client.BalanceAt(ctx, account, nil) //nil is the latest block
+	if err != nil {
+		checkError(errors.New(fmt.Sprintf("Error in get account balance err = %v", err)))
+	}
+	return balance, nil
+}
+
+func BalanceFromBlock(account common.Address, number *big.Int, ctx context.Context) (*big.Int, error) {
+	balance, err := client.BalanceAt(ctx, account, number)
+	if err != nil {
+		checkError(errors.New(fmt.Sprintf("Error in get account balance err = %v", err)))
+	}
+	return balance, nil
+}
+
+func BalanceFromBlockHash(account common.Address, hash common.Hash, ctx context.Context) (*big.Int, error) {
+	balance, err := client.BalanceAtHash(ctx, account, hash)
+	if err != nil {
+		checkError(errors.New(fmt.Sprintf("Error in get account balance err = %v", err)))
+	}
+	return balance, nil
+}
+
+func BalanceFromPendingPool(account common.Address, ctx context.Context) (*big.Int, error) {
+	balance, err := client.PendingBalanceAt(ctx, account)
+	if err != nil {
+		checkError(errors.New(fmt.Sprintf("Error in get account balance err = %v", err)))
+	}
+	return balance, nil
+}
+
+func calcuBalanceToEth(bal *big.Int, decimal int) *big.Float {
+	balance := new(big.Float)
+	balance.SetString(bal.String())
+	balance = balance.Quo(balance, big.NewFloat(math.Pow10(decimal)))
+	return balance
 }
 ```

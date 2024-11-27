@@ -1,4 +1,13 @@
+# WriteTokenTransferRawTx
+`to = SmartComtract`, 表示合约的调用交易，`data` 整体发送到合于地址按照合约逻辑执行
 
+合约函数的调用由两部分组成：[selector + 传参编码](https://yuhuajing.github.io/solidity-book/milestone_2/functions-selector.html)
+- 代币转账函数为`transfer(address,uint256)`
+  - 首先计算 `selector = sha3.NewLegacyKeccak256()[:4]` 
+- 函数需要的两个传参按照 abi.encode 编码向左补全 256bit
+  - `data = append(data, common.LeftPadBytes(receiver, 32)...)`
+
+## 完整代码
 ```go
 package main
 
@@ -42,10 +51,10 @@ func checkError(err error) {
 
 func main() {
 	data := []interface{}{"transfer(address,uint256)", "0x604427A2d0805F7037d2747c2B4D882116616cb9", "200"}
-	LegacyTransferEth("0x779877A7B0D9E8603169DdbD7836e478b4624789", data, 10, 60000)
+	writeTokenTransferRawTx("0x779877A7B0D9E8603169DdbD7836e478b4624789", data, 0, 60000)
 }
 
-func LegacyTransferEth(to string, data []interface{}, value, gasLimit uint64) {
+func writeTokenTransferRawTx(to string, data []interface{}, value, gasLimit uint64) {
 	var ctx = context.Background()
 	// Import the from address
 	//0x96216849c49358B10257cb55b28eA603c874b05E
@@ -161,5 +170,4 @@ func encodeData(datas []interface{}) []byte {
 	//}
 	return data
 }
-
 ```

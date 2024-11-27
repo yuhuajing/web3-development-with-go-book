@@ -36,35 +36,21 @@ func init() {
 ## 区块链Id
 区块链 `peer-to-peer` 网络结构下，全部节点基于 `networkID` 建立连接，但是发送链交易的时候，使用的 `chainID` 防止交易的重放攻击
 ```go
-package main
+	networkID, err := client.NetworkID(ctx)
+	chainId, err := client.ChainID(ctx)
+```
 
-/**
-There are serveral Ethereum client getting ways
-1. local server
-client, err := ethclient.Dial("http://localhost:8545")
-OR
-client, err := ethclient.Dial("/home/user/.ethereum/geth.ipc")
-2. RPC
-client, err := ethclient.Dial("https://mainnet.infura.io")
-**/
+## 完整代码：
+```go
+package milestone1
 
 import (
-	"bytes"
 	"context"
-	"crypto/ecdsa"
-	"encoding/hex"
+	"errors"
 	"fmt"
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/ethereum/go-ethereum/params"
 	"log"
-	"math/big"
-	"strconv"
-	"strings"
+	"main/config"
 )
 
 var (
@@ -73,42 +59,31 @@ var (
 )
 
 func init() {
-	client, err = ethclient.Dial("https://eth.llamarpc.com")
-	if err != nil {
-		log.Fatal(err)
+	client = config.NewClient(config.SymbolETH)
+	if client == nil {
+		checkError(errors.New(fmt.Sprintf("Error in building new client err = %v", err)))
 	}
 }
+
 func checkError(err error) {
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error = %v", err)
 	}
 }
 
-func main() {
-	netIdStr, err := NetworkId()
-	checkError(err)
-	netId, _ := strconv.ParseInt(netIdStr, 10, 64)
-	chainIDStr, err := ChainId()
-	checkError(err)
-	chainId, _ := strconv.ParseInt(chainIDStr, 10, 64)
-	fmt.Println(fmt.Sprintf("client network id = %d, chain id = %d", netId, chainId))
-}
-
-// returns the network ID for this client.
-func NetworkId() (string, error) {
-	var ctx = context.Background()
+// NetworkId returns the network ID for this client.
+func NetworkId(ctx context.Context) (string, error) {
 	networkID, err := client.NetworkID(ctx)
 	if err != nil {
-		return networkID.String(), err
+		checkError(errors.New(fmt.Sprintf("Error in get networkID, err = %v", err)))
 	}
 	return networkID.String(), nil
 }
 
-func ChainId() (string, error) {
-	var ctx = context.Background()
+func ChainId(ctx context.Context) (string, error) {
 	chainId, err := client.ChainID(ctx)
 	if err != nil {
-		return chainId.String(), err
+		checkError(errors.New(fmt.Sprintf("Error in get chainID, err = %v", err)))
 	}
 	return chainId.String(), nil
 }

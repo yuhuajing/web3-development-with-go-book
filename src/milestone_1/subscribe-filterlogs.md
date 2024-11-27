@@ -271,4 +271,28 @@ func stoneDropFilterer(address common.Address) *StonedropFilterer {
 	return StoneFilterer
 }
 ```
+## 订阅Logs
 
+```go
+func SubStakingEvent() {
+	defer wg.Done()
+	query := ethereum.FilterQuery{
+		Addresses: []common.Address{common.HexToAddress(contract)},
+		Topics:    [][]common.Hash{{common.HexToHash("0x5ad8141c164356bdef9e16f08312a7034ac6682a7413ce4fecfc44da5e18fec7")}, {common.HexToHash("0xeb879c9d6d39266b9caad39ced3788f8b8f47bb316e3fb55f3f44cb0f638cbc6")}},
+	}
+	subevents, err := mainnetLPClient.SubscribeFilterLogs(context.Background(), query, logsChan)
+	if err != nil {
+		fmt.Println(fmt.Errorf("Subscribe Event error: %v", err))
+		log.Fatal(err)
+	}
+	for {
+		select {
+		case err := <-subevents.Err():
+			fmt.Println(fmt.Errorf("Parse Event error: %v", err))
+			SubStakingEvent()
+		case lplog := <-logs:
+			time.Sleep(500 * time.Millisecond)
+			parseStakingEventLogs(StakingFilterer, lplog, 1)
+	}
+}
+```

@@ -17,15 +17,7 @@ import (
 
 func NewAccount() common.Address {
 	ecdsaPrivateKey, err := crypto.GenerateKey()
-	if err != nil {
-		log.Fatal(err)
-	}
 	newAddress := EcdsaAddressFromPrivateKey(ecdsaPrivateKey)
-	err = crypto.SaveECDSA(newAddress.Hex()+"_key.txt", ecdsaPrivateKey)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return newAddress
 }
 
 func AddressFromKey(key string) common.Address {
@@ -128,6 +120,24 @@ func AddressFromKeystore(file, secret string) common.Address {
 		log.Fatal(err)
 	}
 	return account.Address
+}
+
+func SignatureFromKeystoreAfterUnlock(file, secret string) string {
+    ks := keystore.NewKeyStore("./tmp", keystore.StandardScryptN, keystore.StandardScryptP)
+    jsonBytes, err := os.ReadFile(file)
+    if err != nil {
+        checkError(errors.New(fmt.Sprintf("Error in reading keystore, error = %v", err)))
+    }
+    account, err := ks.Import(jsonBytes, secret, secret)
+    if err != nil {
+        checkError(errors.New(fmt.Sprintf("Error in exporting keystore account, error = %v", err)))
+    }
+    err = ks.Unlock(account, secret)
+    if err != nil {
+        checkError(errors.New(fmt.Sprintf("Error in unlocking keystore account, error = %v", err)))
+	}
+    signatureBytes, err := ks.SignHash(account, []byte("ww"))
+    return hexutil.Encode(signatureBytes)
 }
 
 func SignatureFromKeystore(file, secret string) string {

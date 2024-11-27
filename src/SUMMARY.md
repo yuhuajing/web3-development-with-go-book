@@ -25,15 +25,16 @@
 - [subscribeFilterLogs](./milestone_1/subscribe-filterlogs.md)
 
 # Milestone 2. Golang Blockchain Tx
-- [sendValueByRawTx](./milestore_2/sendValueByRawTransaction.md)
-- [writeSmartContractByRawTx](./milestore_2/writeContractByRawTx.md)
-- [readSmartContractByABI](./milestore_2/readSmartContract.md)
-- [writeSmartContractByABI](./milestore_2/writeContractByAbi.md)
+- [sendValueByRawTx](./milestone_2/sendValueByRawTransaction.md)
+- [estimatesGas](./milestone_2/estimetegas.md)
+- [writeSmartContractByRawTx](./milestone_2/writeContractByRawTx.md)
+- [readSmartContractByABI](./milestone_2/readSmartContract.md)
+- [writeSmartContractByABI](./milestone_2/writeContractByAbi.md)
 
 # Milestone 3. Golang Blockchain Slot Data
-- [solc](./milestore_3/solc.md)
-- [getStaticSlotData](./milestore_3/getStaticSlotData.md)
-- [ArraysData](./milestore_3/getArrays.md)
-- [BytesData](./milestore_3/getBytes.md)
-- [MappingData](./milestore_3/getMapping.md)
-- [StructData](./milestore_3/getStruct.md)
+- [slot](./milestone_3/slot.md)
+- [getStaticSlotData](./milestone_3/getStaticSlotData.md)
+- [ArraysData](./milestone_3/getArrays.md)
+- [BytesData](./milestone_3/getBytes.md)
+- [MappingData](./milestone_3/getMapping.md)
+- [StructData](./milestone_3/getStruct.md)
