@@ -33,8 +33,14 @@
 
 # Milestone 3. Golang Blockchain Slot Data
 - [slot](./milestone_3/slot.md)
-- [getStaticSlotData](./milestone_3/getStaticSlotData.md)
-- [ArraysData](./milestone_3/getArrays.md)
-- [BytesData](./milestone_3/getBytes.md)
-- [MappingData](./milestone_3/getMapping.md)
-- [StructData](./milestone_3/getStruct.md)
+- [static_uint](./milestone_3/parseStatic_uint.md)
+- [static_int](./milestone_3/parseStatic_int.md)
+- [static_bool](./milestone_3/parseStatic_bool.md)
+- [static_address](./milestone_3/parseStatic_address.md)
+- [static_bytes](./milestone_3/parseStatic_bytes.md)
+- [static_array](./milestone_3/parseStatic_array.md)
+- [static_struct](./milestone_3/parseStatic_struct.md)
+- [dynamic_array](./milestone_3/parseDynamic_array.md)
+- [dynamic_string](./milestone_3/parseDynamic_string.md)
+- [dynamic_mapping](./milestone_3/parseDynamic_mapping.md)
+

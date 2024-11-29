@@ -26,7 +26,7 @@ contract StorageScan {
     // string type
     string private string1 = "abc"; // 0x5
     string private string2 =
-        "solidity is an object-oriented, high-level language for implementing smart contracts."; // 0x6
+        "solidity is an object-oriented, high-level language for implementing smart contracts.solidity is an object-oriented, high-level language for implementing smart contracts.solidity is an object-oriented, high-level language for implementing smart contracts.solidity is an object-oriented, high-level language for implementing smart contracts.solidity is an object-oriented, high-level language for implementing smart contracts.solidity is an object-oriented, high-level language for implementing smart contracts.solidity is an object-oriented, high-level language for implementing smart contracts.solidity is an object-oriented, high-level language for implementing smart contracts.solidity is an object-oriented, high-level language for implementing smart contracts.solidity is an object-oriented, high-level language for implementing smart contracts.solidity is an object-oriented, high-level language for implementing smart contracts."; // 0x6
 
     // bytes typeva
     bytes1 private b1 = "a"; // 0x7
@@ -38,9 +38,13 @@ contract StorageScan {
 
     // struct type
     struct Entity {
-        uint64 age;
+        uint64 age; // //0xa
         uint128 id; // //0xa
         string value; // //0xb
+    }
+    struct Ert {
+        string nme;
+        mapping(uint256 => mapping(address => uint256)) ty;
     }
 
     Entity i; // //0xa
@@ -56,35 +60,42 @@ contract StorageScan {
     Entity[] private slice5; // 0x10
 
     // array value
-    uint8[5] private array1 = [1, 2, 3, 4, 5]; // 0x11
-    uint256[5] private array2 = [256, 257, 258, 259, 260]; // // 0x12-0x16
-    bool[5] private array3 = [true, false, false, true, false]; // 0x17
+    uint8[2][3] private tt = [[1, 2], [4, 5], [6, 7]]; //0x11
+    uint8[5] private array1 = [1, 2, 3, 4, 5]; // 0x14
+    uint256[5] private array2 = [256, 257, 258, 259, 260]; // // 0x15-0x19
+    bool[5] private array3 = [true, false, false, true, false]; // 0x1a
     string[2] private array4 = [
         "abc",
         "solidity is an object-oriented, high-level language for implementing smart contracts."
-    ]; //0x18-0x19
-    Entity[2] private array5; // 0x1a-0x1d
+    ]; //0x1b-0x1c
+    Entity[2] private array5; // 0x1d-0x20
 
     // mapping value
-    mapping(uint256 => string) private mapping1; // 0x1e
-    mapping(string => uint256) private mapping2; // 0x1f
-    mapping(address => uint256) private mapping3; // 0x20
-    mapping(int256 => uint256) private mapping4; // 0x21
-    mapping(bytes1 => uint256) private mapping5; // 0x22
-    mapping(uint256 => Entity) private mapping6; // 0x23
-    mapping(uint256 => mapping(address => uint256)) private mapping7; // 0x24
+    mapping(uint256 => string) private mapping1; // 0x21
+    mapping(string => uint256) private mapping2; // 0x22
+    mapping(address => uint256) private mapping3; // 0x23
+    mapping(int256 => uint256) private mapping4; // 0x24
+    mapping(bytes1 => uint256) private mapping5; // 0x25
+    mapping(uint256 => Entity) private mapping6; // 0x26
+    mapping(uint256 => mapping(address => uint256)) private mapping7; // 0x27
+    Ert ert; //0x28
+    Entity ii; // //0xa
 
     constructor() {
         txenum = Tx.Awaiting;
         i.age = 16;
         i.id = 1;
         i.value = "entity";
+        ii = i;
+        ii.value = string2;
 
         slice5.push(Entity(12, 1, "slice50"));
         slice5.push(Entity(23, 2, "slice51"));
 
         array5[0] = Entity(34, 1, "arry50");
         array5[1] = Entity(18, 2, "array51");
+        ert.nme = "Hello";
+        ert.ty[1][address(5)] = 9;
 
         mapping1[1] = "mapping1";
         mapping2["mapping2"] = 1;

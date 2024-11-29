@@ -129,7 +129,7 @@
       "type": "t_address"
     },
     {
-      "astId": 65,
+      "astId": 74,
       "contract": "StorageScan.sol:StorageScan",
       "label": "i",
       "offset": 0,
@@ -137,7 +137,7 @@
       "type": "t_struct(Entity)62_storage"
     },
     {
-      "astId": 74,
+      "astId": 83,
       "contract": "StorageScan.sol:StorageScan",
       "label": "slice1",
       "offset": 0,
@@ -145,7 +145,7 @@
       "type": "t_array(t_uint8)dyn_storage"
     },
     {
-      "astId": 83,
+      "astId": 92,
       "contract": "StorageScan.sol:StorageScan",
       "label": "slice2",
       "offset": 0,
@@ -153,7 +153,7 @@
       "type": "t_array(t_uint256)dyn_storage"
     },
     {
-      "astId": 92,
+      "astId": 101,
       "contract": "StorageScan.sol:StorageScan",
       "label": "slice3",
       "offset": 0,
@@ -161,7 +161,7 @@
       "type": "t_array(t_bool)dyn_storage"
     },
     {
-      "astId": 98,
+      "astId": 107,
       "contract": "StorageScan.sol:StorageScan",
       "label": "slice4",
       "offset": 0,
@@ -169,7 +169,7 @@
       "type": "t_array(t_string_storage)dyn_storage"
     },
     {
-      "astId": 102,
+      "astId": 111,
       "contract": "StorageScan.sol:StorageScan",
       "label": "slice5",
       "offset": 0,
@@ -177,100 +177,124 @@
       "type": "t_array(t_struct(Entity)62_storage)dyn_storage"
     },
     {
-      "astId": 112,
+      "astId": 127,
+      "contract": "StorageScan.sol:StorageScan",
+      "label": "tt",
+      "offset": 0,
+      "slot": "17",
+      "type": "t_array(t_array(t_uint8)2_storage)3_storage"
+    },
+    {
+      "astId": 137,
       "contract": "StorageScan.sol:StorageScan",
       "label": "array1",
       "offset": 0,
-      "slot": "17",
+      "slot": "20",
       "type": "t_array(t_uint8)5_storage"
     },
     {
-      "astId": 122,
+      "astId": 147,
       "contract": "StorageScan.sol:StorageScan",
       "label": "array2",
       "offset": 0,
-      "slot": "18",
+      "slot": "21",
       "type": "t_array(t_uint256)5_storage"
     },
     {
-      "astId": 132,
+      "astId": 157,
       "contract": "StorageScan.sol:StorageScan",
       "label": "array3",
       "offset": 0,
-      "slot": "23",
-      "type": "t_array(t_bool)5_storage"
-    },
-    {
-      "astId": 139,
-      "contract": "StorageScan.sol:StorageScan",
-      "label": "array4",
-      "offset": 0,
-      "slot": "24",
-      "type": "t_array(t_string_storage)2_storage"
-    },
-    {
-      "astId": 144,
-      "contract": "StorageScan.sol:StorageScan",
-      "label": "array5",
-      "offset": 0,
       "slot": "26",
-      "type": "t_array(t_struct(Entity)62_storage)2_storage"
-    },
-    {
-      "astId": 148,
-      "contract": "StorageScan.sol:StorageScan",
-      "label": "mapping1",
-      "offset": 0,
-      "slot": "30",
-      "type": "t_mapping(t_uint256,t_string_storage)"
-    },
-    {
-      "astId": 152,
-      "contract": "StorageScan.sol:StorageScan",
-      "label": "mapping2",
-      "offset": 0,
-      "slot": "31",
-      "type": "t_mapping(t_string_memory_ptr,t_uint256)"
-    },
-    {
-      "astId": 156,
-      "contract": "StorageScan.sol:StorageScan",
-      "label": "mapping3",
-      "offset": 0,
-      "slot": "32",
-      "type": "t_mapping(t_address,t_uint256)"
-    },
-    {
-      "astId": 160,
-      "contract": "StorageScan.sol:StorageScan",
-      "label": "mapping4",
-      "offset": 0,
-      "slot": "33",
-      "type": "t_mapping(t_int256,t_uint256)"
+      "type": "t_array(t_bool)5_storage"
     },
     {
       "astId": 164,
       "contract": "StorageScan.sol:StorageScan",
-      "label": "mapping5",
+      "label": "array4",
       "offset": 0,
-      "slot": "34",
-      "type": "t_mapping(t_bytes1,t_uint256)"
+      "slot": "27",
+      "type": "t_array(t_string_storage)2_storage"
     },
     {
       "astId": 169,
       "contract": "StorageScan.sol:StorageScan",
-      "label": "mapping6",
+      "label": "array5",
+      "offset": 0,
+      "slot": "29",
+      "type": "t_array(t_struct(Entity)62_storage)2_storage"
+    },
+    {
+      "astId": 173,
+      "contract": "StorageScan.sol:StorageScan",
+      "label": "mapping1",
+      "offset": 0,
+      "slot": "33",
+      "type": "t_mapping(t_uint256,t_string_storage)"
+    },
+    {
+      "astId": 177,
+      "contract": "StorageScan.sol:StorageScan",
+      "label": "mapping2",
+      "offset": 0,
+      "slot": "34",
+      "type": "t_mapping(t_string_memory_ptr,t_uint256)"
+    },
+    {
+      "astId": 181,
+      "contract": "StorageScan.sol:StorageScan",
+      "label": "mapping3",
       "offset": 0,
       "slot": "35",
+      "type": "t_mapping(t_address,t_uint256)"
+    },
+    {
+      "astId": 185,
+      "contract": "StorageScan.sol:StorageScan",
+      "label": "mapping4",
+      "offset": 0,
+      "slot": "36",
+      "type": "t_mapping(t_int256,t_uint256)"
+    },
+    {
+      "astId": 189,
+      "contract": "StorageScan.sol:StorageScan",
+      "label": "mapping5",
+      "offset": 0,
+      "slot": "37",
+      "type": "t_mapping(t_bytes1,t_uint256)"
+    },
+    {
+      "astId": 194,
+      "contract": "StorageScan.sol:StorageScan",
+      "label": "mapping6",
+      "offset": 0,
+      "slot": "38",
       "type": "t_mapping(t_uint256,t_struct(Entity)62_storage)"
     },
     {
-      "astId": 175,
+      "astId": 200,
       "contract": "StorageScan.sol:StorageScan",
       "label": "mapping7",
       "offset": 0,
-      "slot": "36",
+      "slot": "39",
       "type": "t_mapping(t_uint256,t_mapping(t_address,t_uint256))"
+    },
+    {
+      "astId": 203,
+      "contract": "StorageScan.sol:StorageScan",
+      "label": "ert",
+      "offset": 0,
+      "slot": "40",
+      "type": "t_struct(Ert)71_storage"
+    },
+    {
+      "astId": 206,
+      "contract": "StorageScan.sol:StorageScan",
+      "label": "ii",
+      "offset": 0,
+      "slot": "42",
+      "type": "t_struct(Entity)62_storage"
     }
   ],
   "types": {
@@ -278,6 +302,12 @@
       "encoding": "inplace",
       "label": "address",
       "numberOfBytes": "20"
+    },
+    "t_array(t_array(t_uint8)2_storage)3_storage": {
+      "base": "t_array(t_uint8)2_storage",
+      "encoding": "inplace",
+      "label": "uint8[2][3]",
+      "numberOfBytes": "96"
     },
     "t_array(t_bool)5_storage": {
       "base": "t_bool",
@@ -325,6 +355,12 @@
       "base": "t_uint256",
       "encoding": "dynamic_array",
       "label": "uint256[]",
+      "numberOfBytes": "32"
+    },
+    "t_array(t_uint8)2_storage": {
+      "base": "t_uint8",
+      "encoding": "inplace",
+      "label": "uint8[2]",
       "numberOfBytes": "32"
     },
     "t_array(t_uint8)5_storage": {
@@ -465,6 +501,29 @@
           "offset": 0,
           "slot": "1",
           "type": "t_string_storage"
+        }
+      ],
+      "numberOfBytes": "64"
+    },
+    "t_struct(Ert)71_storage": {
+      "encoding": "inplace",
+      "label": "struct StorageScan.Ert",
+      "members": [
+        {
+          "astId": 64,
+          "contract": "StorageScan.sol:StorageScan",
+          "label": "nme",
+          "offset": 0,
+          "slot": "0",
+          "type": "t_string_storage"
+        },
+        {
+          "astId": 70,
+          "contract": "StorageScan.sol:StorageScan",
+          "label": "ty",
+          "offset": 0,
+          "slot": "1",
+          "type": "t_mapping(t_uint256,t_mapping(t_address,t_uint256))"
         }
       ],
       "numberOfBytes": "64"

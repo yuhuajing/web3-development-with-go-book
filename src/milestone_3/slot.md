@@ -1,12 +1,87 @@
 # GetSlotData
 合约数据全部按照[Solidity Slot 存储规则](https://yuhuajing.github.io/solidity-book/milestone_1/static-slot-storage.html)存储在区块链上，因此只要上链的数据就能通过 slot 键获取值
+## GetSlocByKey
+合约数据按照声明顺序和编码规则存储在链上空间
+### 读取区块内slot值
+```go
+func toBlockNumArg(number *big.Int) string {
+	if number == nil {
+		return "latest"
+	}
+	if number.Sign() >= 0 {
+		return hexutil.EncodeBig(number)
+	}
+	// It's negative.
+	if number.IsInt64() {
+		return rpc.BlockNumber(number.Int64()).String()
+	}
+	// It's negative and large, which is invalid.
+	return fmt.Sprintf("<invalid %d>", number)
+}
+```
+- `blockNum == nil`， 表示基于最新区块高度的合约状态读取 `slot` 数值
+- `blockNum` 为负数:
+  - 数值 `-1 ~-4` 都有具体类型的对应
+  - 数值 `<-4`,报错
+```go
+const (
+SafeBlockNumber      = BlockNumber(-4)
+FinalizedBlockNumber = BlockNumber(-3)
+LatestBlockNumber    = BlockNumber(-2)
+PendingBlockNumber   = BlockNumber(-1)
+EarliestBlockNumber  = BlockNumber(0)
+)
+```
+- blockNum 为正数: 读取截止当前区块的合约内部存储的 slot 数值
+- blockNum > 最新区快： 报错 ` error = header not found`
 
+```go
+func GetStorageAtBlock(ctx context.Context, address common.Address, slot common.Hash, blockNum *big.Int) (*big.Int, error) {
+	//t := common.BigToHash(big.NewInt(int64(slot)))
+	int256 := new(big.Int)
+	res, err := client.StorageAt(ctx, address, slot, blockNum) // nil is the latest blockNum
+	if err != nil {
+		return int256, err
+	}
+	int256.SetBytes(res)
+	return int256, nil
+}
+```
+### 读取区块slot值
+基于区块 hash 锁定区块，读取截止区块高度的合约数据的 slot 数值
+- hash 不存在：报错 `error = header for hash not found`
+```go
+func GetStorageAtHash(ctx context.Context, address common.Address, slot common.Hash, hash common.Hash) (*big.Int, error) {
+	int256 := new(big.Int)
+	res, err := client.StorageAtHash(ctx, address, slot, hash)
+	if err != nil {
+		return int256, err
+	}
+	int256.SetBytes(res)
+
+	return int256, nil
+}
+```
+### PendingStorage
+```go
+
+func GetPendingStorage(ctx context.Context, address common.Address, slot common.Hash) (*big.Int, error) {
+	int256 := new(big.Int)
+	res, err := client.PendingStorageAt(ctx, address, slot)
+	if err != nil {
+		return int256, err
+	}
+	int256.SetBytes(res)
+
+	return int256, nil
+}
+```
+## ContractSlotParser
 合约内部的存储结构通过标准的 `json` 请求可以获取 
 > `solc --storage-layout --pretty-json -o $PWD/tempDirForSolc --overwrite ./xxx.sol`
 
 `Json` 对象包含两个键值： `storage` 和 `types`
-
-## Storage
+### Storage
 ```json
 {
     "astId": 2,
@@ -17,13 +92,13 @@
     "type": "t_uint256"
 }
 ```
-- astId:状态变量声明的 AST 节点的ID
-- contract: 当前合约名称
-- label:状态变量的名称
-- offset:字节偏移量，表示在当前 slot 中的偏移量
-- slot:存储的插槽位置
-- type:标识符，表示具体的数据存储，在 types 中存在对用的结构体数据
-## Type
+- `astId`:状态变量声明的 `AST` 节点的 `ID`
+- `contract`: 当前合约名称
+- `label`:状态变量的名称
+- `offset`:字节偏移量，表示在当前 `slot` 中的偏移量
+- `slot`:存储的插槽位置
+- `type`:标识符，表示具体的数据存储，在 `types` 中存在对用的结构体数据
+### Type
 ```json
 {
     "base": "t_bool",
@@ -32,7 +107,7 @@
     "numberOfBytes": "32",
     "key": "t_string_memory_ptr",
     "value": "t_uint256",
-    "members": Type数组
+    "members": `Type` 数组
 }
 ```
 基础数据结构：
@@ -103,3 +178,8 @@
       "numberOfBytes": "64"
     },
 ```
+
+## preference
+https://github.com/yuhuajing/getSCSlotData/tree/main
+
+https://github.com/yuhuajing/EVMSlotScan/tree/main
