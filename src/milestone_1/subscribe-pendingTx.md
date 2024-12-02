@@ -1,7 +1,7 @@
 # subscribePendingTx
-`geth` 提供查询 pending 交易的函数
+`geth` 提供查询 `pending` 交易的函数
 - `subscribeFullPendingTransactions` 用于接收完整的待处理交易
-- `subscribePendingTransactions` 用于接收待处理交易hash
+- `subscribePendingTransactions` 用于接收待处理交易 `hash`
 ```go
 package main
 

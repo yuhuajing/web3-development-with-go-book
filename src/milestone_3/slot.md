@@ -4,38 +4,6 @@
 合约数据按照声明顺序和编码规则存储在链上空间
 ### 读取区块内slot值
 ```go
-func toBlockNumArg(number *big.Int) string {
-	if number == nil {
-		return "latest"
-	}
-	if number.Sign() >= 0 {
-		return hexutil.EncodeBig(number)
-	}
-	// It's negative.
-	if number.IsInt64() {
-		return rpc.BlockNumber(number.Int64()).String()
-	}
-	// It's negative and large, which is invalid.
-	return fmt.Sprintf("<invalid %d>", number)
-}
-```
-- `blockNum == nil`， 表示基于最新区块高度的合约状态读取 `slot` 数值
-- `blockNum` 为负数:
-  - 数值 `-1 ~-4` 都有具体类型的对应
-  - 数值 `<-4`,报错
-```go
-const (
-SafeBlockNumber      = BlockNumber(-4)
-FinalizedBlockNumber = BlockNumber(-3)
-LatestBlockNumber    = BlockNumber(-2)
-PendingBlockNumber   = BlockNumber(-1)
-EarliestBlockNumber  = BlockNumber(0)
-)
-```
-- blockNum 为正数: 读取截止当前区块的合约内部存储的 slot 数值
-- blockNum > 最新区快： 报错 ` error = header not found`
-
-```go
 func GetStorageAtBlock(ctx context.Context, address common.Address, slot common.Hash, blockNum *big.Int) (*big.Int, error) {
 	//t := common.BigToHash(big.NewInt(int64(slot)))
 	int256 := new(big.Int)

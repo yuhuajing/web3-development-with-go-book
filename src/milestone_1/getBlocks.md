@@ -131,8 +131,7 @@ Examples:
 }
 ```
 ## 返回特定区块的区块头信息-BlockHeight
-1. 提供的区块高度 `< 0  || == nil`，按照最新区块高度处理
-2. 提供的区块高度 `> latestBlockHeight`，报错 `ethereum.NotFound`
+
 ```go
 func checkError(err error) {
 	if err != nil {

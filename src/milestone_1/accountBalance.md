@@ -10,6 +10,56 @@
 	blockNum := big.NewInt(99999)
 	balance, err := client.BalanceAt(ctx, account, blockNum)
 ```
+区块 `num` 的相关异常情况：
+```go
+func toBlockNumArg(number *big.Int) string {
+	if number == nil {
+		return "latest"
+	}
+// Sign returns:
+//   - -1 if x < 0;
+//   - 0 if x == 0;
+//   - +1 if x > 0.
+	if number.Sign() >= 0 {
+		return hexutil.EncodeBig(number)
+	}
+	// It's negative.
+	// IsInt64 reports whether x can be represented as an int64.
+	if number.IsInt64() {
+		return rpc.BlockNumber(number.Int64()).String()
+	}
+	// It's negative and large, which is invalid.
+	return fmt.Sprintf("<invalid %d>", number)
+}
+```
+- `blockNum == nil`， 表示基于最新区块高度的合约状态读取 `slot` 数值
+- `blockNum` 为负数:
+  - 数值 `-1 ~-4` 都有具体类型的对应
+  - 数值 `<-4`,报错 `invalid argument 1: hex string without 0x prefix`
+```go
+func (bn BlockNumber) String() string {
+	switch bn {
+	case EarliestBlockNumber: //0
+		return "earliest"
+	case LatestBlockNumber://-2
+		return "latest"
+	case PendingBlockNumber://-1
+		return "pending"
+	case FinalizedBlockNumber://-3
+		return "finalized"
+	case SafeBlockNumber://-4
+		return "safe"
+	default:
+		if bn < 0 {
+			return fmt.Sprintf("<invalid %d>", bn)
+		}
+		return hexutil.Uint64(bn).String()
+	}
+}
+```
+- blockNum 为正数: 读取截止当前区块的合约内部存储的 slot 数值
+- 提供的区块高度 `> latestBlockHeight`，报错 `ethereum.NotFound`
+
 ### 读取特定区块中账户余额-BlockHash
 ```go
 	blockHash := common.HexToHash("0x0fa8fe23357be11db6273d5744a091b7f5baa70d7824addd680c8ed1fd2fbf0b")

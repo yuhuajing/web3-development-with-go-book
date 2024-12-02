@@ -15,47 +15,50 @@ If you only heard about blockchains and were interested but haven't had a chance
 Alright, let's get started!
 
 ## Useful Links
-1. This book is hosted on GitHub: <https://github.com/yuhuajing/solidity-book>
+1. This book is hosted on GitHub: <https://github.com/yuhuajing/web3-development-with-go-book>
 
 ## Table of Contents
-- Milestone 0. Solidity Data
-  1. data-bytes
-  2. data-enum
-  3. data-foreach
+- Milestone 0. Base Golang Knowledge
+  1. init
+  2. rune
+  3. slice
   4. data-mapping
-  5. data-variables
-  6. data-encode
-- Milestone 1. Solidity functions
-  1. variables-slot-storage
-  2. variables-unicode
-  3. variables-user-defined-type
-- Milestone 2. Solidity variables
-  1. Functions
-  2. Functions modifier
-  3. Functions selector
-  4. Functions sendValue
-  5. errors check
-- Milestone 3. Sollidity contracts create
-  1. contracts-import
-  2. contracts-create
-  3. contracts-creationcodes
-  4. contracts-destroy
-  5. contracts-event
-  6. contracts-getcodes
-- Milestone 4: Sollidity contracts type
-  1. contracts-interface
-  2. contracts-library
-  3. contracts-abstract
-  4. contracts-inherite
-  5. contracts-proxy
-- Milestone 5. Sollidity contracts call
-  1. contracts-call
-  2. contracts-delegatecall
-  3. contrats-staticcall
-  4. contracts-precompile
-- Milestone 6. Sollidity advanced
-  1. merkle tree
-  2. ecdsa signature
+  5. data-channel
+  6. func
+  7. defer
+  8. GMP
+  9. GC
+- Milestone 1. Golang Blockchain
+  1. initBlockchainConn
+  2. getAccountBalance
+  3. getAccountCodes
+  4. generateAccount
+  5. getBlockchainBlocks
+  6. getBlockchainTransactions
+  7. subscribeBlockchainNewHead
+  8. subscribeBlockchainNewTransactions
+  9. subscribeBlockchainNewLogs
+- Milestone 2. Golang Blockchain Transactions
+  1. buildRawTransactions
+  2. callContractByRawTransactions
+  3. estimateTransactionsGas
+  4. readContractByABI
+  5. writeContractByABI
+- Milestone 3. Golang Blockchain Contract Slot
+  1. slotKnowledge
+  2. staticUint
+  3. staticInt
+  4. staticBool
+  5. staticAddress
+  6. staticBytes
+  7. staticArray
+  8. staticStruct
+  9. staticString
+  10. staticMapping
+- Milestone 4. Golang Blockchain Tools
+  1. merkleProof
+  2. signature
+
 ## Running locally
 
 To run the book locally:
@@ -67,7 +70,7 @@ To run the book locally:
     ```
 1. Clone the repo:
     ```shell
-    $ git clone https://github.com/yuhuajing/solidity-book.git
+    $ git clone https://github.com/yuhuajing/web3-development-with-go-book.git
     $ cd solidity-book
     ```
 1. Run:

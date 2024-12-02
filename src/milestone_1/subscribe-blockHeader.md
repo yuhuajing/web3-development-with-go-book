@@ -1,9 +1,9 @@
 # subscribeNewHead
-通过 RPC 节点从网络订阅新区块信息，基于 websocket 和 channel 实现。
+通过 `RPC` 节点从网络订阅新区块信息，基于 `websocket` 和 `channel` 实现。
 
-RPC 节点服务作为服务商，在收到新区块时将数据写入通道
+`RPC` 节点服务作为服务商，在收到新区块时将数据写入通道
 
-Golang本地作为使用方，从区块中即使读取数据，防止写入阻塞
+`Golang` 本地作为使用方，从区块中即使读取数据，防止写入阻塞
 - 如果不及时读取通道数据
   - 报错 `subscribe new block error: websocket: close 1006 (abnormal closure): unexpected EOF`
 - 通过 `for select` 循环读取通道数据
