@@ -13,7 +13,6 @@
 - [GMP](./milestone_0/GMP.md)
 - [GC](./milestone_0/GC.md)
 - [DataBase](./milestone_0/database.md)
-- [FiberRoute](./milestone_0/fiber.md)
 
 # Milestone 1. Golang Blockchain Common
 - [initConn](./milestone_1/initConn.md)
