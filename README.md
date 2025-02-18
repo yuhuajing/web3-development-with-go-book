@@ -16,6 +16,7 @@ Alright, let's get started!
 
 ## Useful Links
 1. This book is hosted on GitHub: <https://github.com/yuhuajing/web3-development-with-go-book>
+2. Page: <https://yuhuajing.github.io/web3-development-with-go-book/index.html>
 
 ## Table of Contents
 - Milestone 0. Base Golang Knowledge
