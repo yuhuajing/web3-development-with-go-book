@@ -62,19 +62,17 @@ Alright, let's get started!
 ## Running locally
 
 To run the book locally:
-1. Install [Rust](https://www.rust-lang.org/).
-1. Install [mdBook](https://github.com/rust-lang/mdBook):
-    ```shell
-    $ cargo install mdbook
-    $ cargo install mdbook-katex
-    ```
-1. Clone the repo:
-    ```shell
-    $ git clone https://github.com/yuhuajing/web3-development-with-go-book.git
-    $ cd solidity-book
-    ```
-1. Run:
-    ```shell
-    $ mdbook serve --open
-    ```
-1. Visit http://localhost:3000/ (or whatever URL the previous command outputs!)
+1. Install Rust.
+- `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+2. Install mdBook:
+```shell
+    cargo install mdbook
+    cargo install mdbook-katex
+```
+3. Clone the repo:
+```shell
+    git clone https://github.com/yuhuajing/web3-development-with-go-book.git
+    cd web3-development-with-go-book
+    mdbook serve --open
+```
+4. Visit http://localhost:3000/ 

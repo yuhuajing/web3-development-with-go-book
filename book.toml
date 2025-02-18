@@ -3,15 +3,14 @@ authors = ["HuajingYu"]
 language = "en"
 multilingual = false
 src = "src"
-title = "Solidity Development Book"
-description = "A book that teaches how to learn Solidity smart contracts."
+title = "Web3 Golang Development Book"
+description = "A book that teaches how to learn web3 golang SDK."
 
 [output.html]
 curly-quotes = true
-git-repository-url = "https://github.com/yuhuajing/solidity-book"
+git-repository-url = "https://github.com/yuhuajing/web3-development-with-go-book"
 git-repository-icon = "fa-github"
-edit-url-template = "https://github.com/yuhuajing/solidity-book/edit/main/{path}"
-cname = "solidity-book.com"
+cname = "web3-golang--book.com"
 
 [preprocessor.katex]
 after = ["links"]
