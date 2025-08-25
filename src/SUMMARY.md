@@ -13,6 +13,7 @@
 - [GMP](./milestone_0/GMP.md)
 - [GC](./milestone_0/GC.md)
 - [DataBase](./milestone_0/database.md)
+- [opFile](./milestone_0/opfile.md)
 
 # Milestone 1. 查询链上数据
 - [连接区块链](./milestone_1/initConn.md)
