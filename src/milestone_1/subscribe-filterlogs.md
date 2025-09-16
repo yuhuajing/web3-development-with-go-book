@@ -296,3 +296,173 @@ func SubStakingEvent() {
 	}
 }
 ```
+## 多协程处理Logs
+
+```go
+package main
+
+import (
+	"context"
+	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"log"
+	"main/config"
+	"main/dbop"
+	"main/eth"
+	"math/big"
+	"sync"
+)
+
+var (
+	headers map[string]chan *types.Header
+	logs    map[string]chan types.Log
+)
+
+func init() {
+	headers = make(map[string]chan *types.Header)
+	logs = make(map[string]chan types.Log)
+
+	for _, chain := range config.ChainName {
+		eth.BuildFilterClient(chain)
+		headers[chain] = make(chan *types.Header)
+		logs[chain] = make(chan types.Log) // 设置缓冲区
+	}
+}
+
+func main() {
+	var wg sync.WaitGroup
+	start, end := 54099128, 61343736
+	interval := (end - start) / 5 // 根据需要划分区间
+
+	for _, chain := range config.ChainName {
+		chainCopy := chain
+
+		// 启动多个协程进行 FilterLogs
+		for i := 0; i < 10; i++ { // 假设我们要启动 10 个协程
+			s1 := start + interval*i
+			e1 := s1 + interval
+
+			wg.Add(1)
+			go func(s, e int, c string) {
+				defer wg.Done()
+				DealHistoryRangeTx(s, e, c) // 假设 FilterLogs 函数接收 start 和 end
+			}(s1, e1, chainCopy)
+		}
+
+		//wg.Add(1)
+		//go func(c string) {
+		//	defer wg.Done()
+		//	DealHistoryTx(c)
+		//}(chainCopy)
+
+		wg.Add(1)
+		go func(c string) {
+			defer wg.Done()
+			ParseEventLog(c)
+		}(chainCopy)
+
+		// 如果需要监听区块，可以取消注释以下代码
+		/*
+			wg.Add(1)
+			go func(c string) {
+				defer wg.Done()
+				listenBlocks(c)
+			}(chainCopy)
+		*/
+	}
+
+	wg.Wait() // 等待所有协程完成
+}
+
+
+func listenBlocks(chain string) {
+	client := eth.ClientFromChain[chain]
+	subheaders, err := client.SubscribeNewHead(context.Background(), headers[chain])
+	if err != nil {
+		log.Fatalf("Subscribe Block error for chain %s: %v", chain, err)
+	}
+	defer subheaders.Unsubscribe() // 确保在结束时取消订阅
+
+	for {
+		select {
+		case err := <-subheaders.Err():
+			log.Fatalf("Subscribe Block error for chain %s: %v", chain, err)
+		case header := <-headers[chain]:
+			expectBlockNum := dbop.GetStartBlockNumber(chain, config.OIKContractFromChain[chain])
+			if header.Number.Uint64() > expectBlockNum {
+				query := ethereum.FilterQuery{
+					FromBlock: big.NewInt(int64(expectBlockNum)),
+					ToBlock:   header.Number,
+				}
+				query.Addresses = append(query.Addresses, common.HexToAddress(config.OIKContractFromChain[chain]))
+
+				top := make([]common.Hash, 0)
+				for _, topic := range config.TopicFromChain[chain] {
+					top = append(top, common.HexToHash(topic))
+				}
+				query.Topics = append(query.Topics, top)
+
+				// 使用 goroutine 获取日志
+				elog, err := client.FilterLogs(context.Background(), query)
+				if err != nil {
+					log.Fatalf("FilterLogs error for chain %s: %v", chain, err)
+				}
+				for _, logData := range elog {
+					logs[chain] <- logData
+				}
+			}
+			//case elog := <-logs[chain]:
+			//log.Printf("Received logs for chain %s: %d logs", chain, len(elog))
+			//ParseEventLog(chain, elog)
+		}
+	}
+}
+
+func DealHistoryRangeTx(start, end int, chain string) {
+	//start := dbop.GetStartBlockNumber(chain, config.OIKContractFromChain[chain])
+	//end := eth.ChainBlockNumber(chain)
+	contract := config.OIKContractFromChain[chain]
+	topics := config.TopicFromChain[chain]
+	client := eth.ClientFromChain[chain]
+	for start <= end {
+		from := &big.Int{}
+		from = from.SetInt64(int64(start))
+		start += 5000
+		to := &big.Int{}
+		if start > end {
+			to = to.SetInt64(int64(end))
+		} else {
+			to = to.SetInt64(int64(start))
+		}
+		query := ethereum.FilterQuery{
+			FromBlock: from,
+			ToBlock:   to,
+		}
+		query.Addresses = append(query.Addresses, common.HexToAddress(contract))
+
+		top := make([]common.Hash, 0)
+		for _, topic := range topics {
+			top = append(top, common.HexToHash(topic))
+		}
+		query.Topics = append(query.Topics, top)
+		elog, err := client.FilterLogs(context.Background(), query)
+		if err != nil {
+			log.Fatalf("FilterLogs error for chain %s: %v", chain, err)
+		}
+		for _, logData := range elog {
+			logs[chain] <- logData
+		}
+	}
+}
+
+func ParseEventLog(chain string) {
+	for {
+		select {
+		case logdata := <-logs[chain]:
+			dbop.InsertTxLog(chain, logdata)
+		}
+	}
+}
+
+```
